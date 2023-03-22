@@ -1,4 +1,4 @@
-name: Java CI with Maven and Snyk
+name: Java CI with Maven and Snyk - Extended
 
 on:
   push:
