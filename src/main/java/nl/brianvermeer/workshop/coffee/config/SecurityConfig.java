@@ -24,7 +24,6 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/", "/webjars/**", "/css/**", "/home", "/index", "/register", "/products/direct/**","/image/**").permitAll()
                 .antMatchers("/orders/add", "/orders/myorders/**", "/uploadimage").hasAnyRole("ADMIN", "CUSTOMER")
                 .antMatchers("/products/**", "/orders/**", "/persons/**").hasRole("ADMIN")
@@ -40,7 +39,7 @@ public class SecurityConfig {
                         logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
                 )
-                .csrf().disable().headers().frameOptions().disable()
+                .csrf().and().headers().frameOptions().disable()
                 .and().requestCache().disable();
 
         return http.build();

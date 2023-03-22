@@ -2,6 +2,7 @@ package nl.brianvermeer.workshop.coffee.controller;
 
 import nl.brianvermeer.workshop.coffee.domain.Product;
 import nl.brianvermeer.workshop.coffee.service.ProductService;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -90,7 +91,8 @@ public class ProductController {
 
 
         writer.write(head);
-        writer.write("<div class=\"panel-heading\"><h1>"+ param + "</h1></div>");
+        String strEscaped = StringEscapeUtils.escapeHtml4( param );
+        writer.write("<div class=\"panel-heading\"><h1>"+ strEscaped + "</h1></div>");
 
         String output = "<div class=\"panel-body\">" +
                 "<ul>" +

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,14 +23,22 @@ public class UploadController {
 
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
 
-    @GetMapping("/uploadimage") public String displayUploadForm() {
+    @GetMapping("/uploadimage")
+    public String displayUploadForm() {
         return "person/upload";
     }
 
-    @PostMapping("/uploadimage") public String uploadImage(Model model, @RequestParam("image") MultipartFile file, Principal principal) throws IOException {
-        var name = file.getOriginalFilename().replace(" ", "_");
+    @PostMapping("/uploadimage")
+    public String uploadImage(Model model, @RequestParam("multipart") MultipartFile multipart, Principal principal) throws IOException {
+        var name = multipart.getOriginalFilename().replace(" ", "_");
         var fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, name);
-        Files.write(fileNameAndPath, file.getBytes());
+
+        final File file = fileNameAndPath.toFile();
+        if (!file.getCanonicalPath().startsWith(UPLOAD_DIRECTORY))  {
+            throw new IOException("Could not upload image");
+        }
+
+        Files.write(fileNameAndPath, multipart.getBytes());
         model.addAttribute("msg", "Uploaded images: " + name);
 
         if (principal == null) {
